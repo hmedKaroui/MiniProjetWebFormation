@@ -1,6 +1,7 @@
 package world.cup.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import world.cup.models_enums.FormateurType;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -9,14 +10,12 @@ import java.util.Set;
 
 @SuppressWarnings("SpellCheckingInspection")
 @Entity
-@Table(name= "participants")
-@Inheritance(strategy= InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="participant_type")
-public abstract class Participant {
+@Table(name= "formateurs")
+public class Formateur {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="PARTICIPANT_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="FORMATEUR_ID")
     private long id ;
 
     @Column(name="NOM")
@@ -31,25 +30,26 @@ public abstract class Participant {
     @Column(name="TEL")
     private int tel;
 
+    @Column(name="TYPE_FORMATEUR")
+    @Enumerated(EnumType.STRING)
+    private FormateurType type;
+
     @ManyToOne
-    @JoinColumn(name="FK_PROFIL_ID")
-    private Profile profil;
+    @JoinColumn(name="FK_ORGANISME_ID")
+    private Organisme organisme;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "T_PARTICIPANT_SESSION",
-            joinColumns={@JoinColumn(name="PARTICIPANT_ID")},
-            inverseJoinColumns={@JoinColumn(name ="SESSION_ID")})
-    @JsonIgnoreProperties("participants")
-    private Set<Session> sessions =  new HashSet<>();
+    @OneToMany(mappedBy="formateur")
+    @JsonIgnoreProperties("formateur")
+    private Set<Session> sessions = new HashSet<>();
 
-    public Participant() {
-    }
+    public Formateur() {}
 
-    public Participant(String nom, String prenom, String email, int tel) {
+    public Formateur(String nom, String prenom, String email, int tel, FormateurType type) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
         this.tel = tel;
+        this.type = type;
     }
 
     public long getId() {
@@ -58,6 +58,14 @@ public abstract class Participant {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public Organisme getOrganisme() {
+        return organisme;
+    }
+
+    public void setOrganisme(Organisme organisme) {
+        this.organisme = organisme;
     }
 
     public String getNom() {
@@ -76,22 +84,6 @@ public abstract class Participant {
         this.prenom = prenom;
     }
 
-    public int getTel() {
-        return tel;
-    }
-
-    public void setTel(int tel) {
-        this.tel = tel;
-    }
-
-    public Profile getProfil() {
-        return profil;
-    }
-
-    public void setProfil(Profile profil) {
-        this.profil = profil;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -100,7 +92,23 @@ public abstract class Participant {
         this.email = email;
     }
 
-    @JsonIgnoreProperties("participants")
+    public int getTel() {
+        return tel;
+    }
+
+    public void setTel(int tel) {
+        this.tel = tel;
+    }
+
+    public FormateurType getType() {
+        return type;
+    }
+
+    public void setType(FormateurType type) {
+        this.type = type;
+    }
+
+    @JsonIgnoreProperties("formateur")
     public Set<Session> getSessions() {
         return sessions;
     }
@@ -111,13 +119,13 @@ public abstract class Participant {
 
     @Override
     public String toString() {
-        return "Participant{" +
+        return "Formateur{" +
                 "id=" + id +
                 ", Nom='" + nom + '\'' +
                 ", Prenom='" + prenom + '\'' +
                 ", Email='" + email + '\'' +
                 ", Tel=" + tel +
-                ", Profil=" + profil +
+                ", Type=" + type +
                 '}';
     }
 }
