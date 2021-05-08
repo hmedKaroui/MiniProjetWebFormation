@@ -1,6 +1,10 @@
 package world.cup.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @SuppressWarnings("SpellCheckingInspection")
 @Entity
@@ -16,6 +20,10 @@ public class Pays {
 
     @Column(name="LIBELLE")
     private String libelle;
+
+    @OneToMany(mappedBy="pays")
+    @JsonIgnoreProperties("pays")
+    private Set<ParticipantInternational> participantsInternational = new HashSet<>();
 
     public Pays() {}
 
@@ -46,6 +54,15 @@ public class Pays {
 
     public void setLibelle(String libelle) {
         this.libelle = libelle;
+    }
+
+    @JsonIgnoreProperties("pays")
+    public Set<ParticipantInternational> getParticipantsInternational() {
+        return participantsInternational;
+    }
+
+    public void setParticipantsInternational(Set<ParticipantInternational> participantsInternational) {
+        this.participantsInternational = participantsInternational;
     }
 
     @Override

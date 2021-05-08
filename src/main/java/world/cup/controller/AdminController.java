@@ -5,10 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import world.cup.models.Organisme;
-import world.cup.models.ParticipantNational;
-import world.cup.models.Pays;
-import world.cup.models.Profile;
+import world.cup.models.*;
 import world.cup.service.AdminService;
 
 import java.util.List;
@@ -98,17 +95,54 @@ public class AdminController {
     }
     //End Of Organism Managament
 
-    //Profile Management
+    // Domaine endpoints
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/domaines")
+    public ResponseEntity<List<Domaine>> getAllDomaine() {
+        List<Domaine> domaines = adminService.findAllDomaine();
+        return new ResponseEntity<>(domaines, HttpStatus.OK);
+    }
 
-    //End of Profile Management
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/domaines/{id}")
+    public ResponseEntity<Domaine> getDomaineById(@PathVariable Long id) {
+        Domaine domaine = adminService.findDomaineById(id);
+        return new ResponseEntity<>(domaine,HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/domaines/add")
+    public ResponseEntity<Domaine> addDomaine(@RequestBody Domaine domaine) {
+        Domaine d = adminService.addDomaine(domaine);
+        return new ResponseEntity<>(d,HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/domaines/update/{id}")
+    public ResponseEntity<Domaine> updateDomaine(@PathVariable Long id ,@RequestBody Domaine changes) {
+        Domaine domaine = adminService.updateDomaine(id,changes);
+        return new ResponseEntity<>(domaine,HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/domaines/delete/{id}")
+    public ResponseEntity<?> deleteDomaine(@PathVariable Long id) {
+        adminService.deleteDomaine(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    // End Domaine endpoints
+
+    //Profile Management
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/profiles")
     public ResponseEntity<List<Profile>> getAllProfile() {
         List<Profile> Profiles = adminService.findAllProfile();
         return new ResponseEntity<>(Profiles, HttpStatus.OK);
     }
-    //Participant National Managament
+    //End of Profile Management
 
+
+    //Participant National Managament
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/participantsNational")
     public ResponseEntity<List<ParticipantNational>> getAllParticipantNational() {
@@ -152,4 +186,93 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     //End of Participant National Managament
+
+    //Participant International endpoints
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/participantsInternational")
+    public ResponseEntity<List<ParticipantInternational>> getAllParticipantInternational() {
+        List<ParticipantInternational> participantInternational = adminService.findAllParticipantInternational();
+        return new ResponseEntity<>(participantInternational, HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/participantsInternational/{id}")
+    public ResponseEntity<ParticipantInternational> getParticipantInternationalById(@PathVariable Long id) {
+        ParticipantInternational participantInternational = adminService.findParticipantInternationalById(id);
+        return new ResponseEntity<>(participantInternational,HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/participantsInternational/add")
+    public ResponseEntity<ParticipantInternational> addParticipantInternational(@RequestBody ParticipantInternational participantInternational) {
+        ParticipantInternational p = adminService.addParticipantInternational(participantInternational);
+        return new ResponseEntity<>(p,HttpStatus.CREATED);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/participantsInternational/update/{id}")
+    public ResponseEntity<ParticipantInternational> updateParticipantInternational(@PathVariable Long id ,@RequestBody ParticipantInternational changes) {
+        ParticipantInternational participantInternational = adminService.updateParticipantInternational(id,changes);
+        return new ResponseEntity<>(participantInternational,HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/participantsInternational/updateProfile/{id}")
+    public ResponseEntity<ParticipantInternational> updateParticipantInternationalProfile(@PathVariable Long id ,@RequestBody ParticipantInternational changes) {
+        ParticipantInternational participantInternational = adminService.updateParticipantInternationalProfile(id,changes);
+        return new ResponseEntity<>(participantInternational,HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/participantsInternational/updatePays/{id}")
+    public ResponseEntity<ParticipantInternational> updateParticipantInternationalPays(@PathVariable Long id ,@RequestBody ParticipantInternational changes) {
+        ParticipantInternational participantInternational = adminService.updateParticipantInternationalPays(id,changes);
+        return new ResponseEntity<>(participantInternational,HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/participantsInternational/delete/{id}")
+    public ResponseEntity<?> deleteParticipantInternational(@PathVariable Long id) {
+        adminService.deleteParticipantInternational(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    //End of Participant Internation endpoints
+
+    //Formateur endpoints
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/formateurs")
+    public ResponseEntity<List<Formateur>> getAllFormateur() {
+        List<Formateur> formateurs = adminService.findAllFormateur();
+        return new ResponseEntity<>(formateurs, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/formateurs/{id}")
+    public ResponseEntity<Formateur> getFormateurById(@PathVariable Long id) {
+        Formateur formateur = adminService.findFormateurById(id);
+        return new ResponseEntity<>(formateur,HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/formateurs/add")
+    public ResponseEntity<Formateur> addFormateur(@RequestBody Formateur formateur) {
+        Formateur f = adminService.addFormateur(formateur);
+        return new ResponseEntity<>(f,HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/formateurs/update/{id}")
+    public ResponseEntity<Formateur> updateFormateur(@PathVariable Long id ,@RequestBody Formateur changes) {
+        Formateur formateur = adminService.updateFormateur(id,changes);
+        return new ResponseEntity<>(formateur,HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/formateurs/updateOrganisme/{id}")
+    public ResponseEntity<Formateur> updateFormateurOrganisme(@PathVariable Long id ,@RequestBody Formateur changes) {
+        Formateur formateur = adminService.updateFormateurOrganisme(id,changes);
+        return new ResponseEntity<>(formateur,HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/formateurs/delete/{id}")
+    public ResponseEntity<?> deleteFormateur(@PathVariable Long id) {
+        adminService.deleteFormateur(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    //End of Formateur endpoints
 }
