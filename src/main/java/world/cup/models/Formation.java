@@ -1,6 +1,7 @@
 package world.cup.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import world.cup.models_enums.FormationType;
 
 import javax.persistence.*;
@@ -38,12 +39,10 @@ public class Formation {
 
         @ManyToOne
         @JoinColumn(name="FK_DOMAINE_ID")
+        @JsonIgnoreProperties("formations")
         private Domaine domaine;
 
-        @ManyToMany(cascade = CascadeType.ALL)
-        @JoinTable(name = "T_FORMATION_SESSION",
-            joinColumns={@JoinColumn(name="FORMATION_ID")},
-            inverseJoinColumns={@JoinColumn(name ="SESSION_ID")})
+        @ManyToMany(fetch = FetchType.LAZY, mappedBy="formations")
         @JsonIgnoreProperties("formations")
         private Set<Session> sessions =  new HashSet<>();
 
@@ -114,10 +113,11 @@ public class Formation {
         this.dateFin = dateFin;
     }
 
+    @JsonIgnoreProperties("formations")
     public Domaine getDomaine() {
         return domaine;
     }
-
+    @JsonProperty
     public void setDomaine(Domaine domaine) {
         this.domaine = domaine;
     }

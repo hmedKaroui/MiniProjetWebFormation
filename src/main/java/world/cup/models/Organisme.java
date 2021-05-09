@@ -1,6 +1,10 @@
 package world.cup.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @SuppressWarnings("SpellCheckingInspection")
 @Entity
@@ -13,6 +17,18 @@ public class Organisme {
 
     @Column(name="LIBELLE")
     private String libelle ;
+
+    @OneToMany(mappedBy="organisme")
+    @JsonIgnoreProperties("organisme")
+    private Set<Formateur> formateurs = new HashSet<>();
+
+    @OneToMany(mappedBy="organisme")
+    @JsonIgnoreProperties("organisme")
+    private Set<ParticipantNational> participantsNational = new HashSet<>();
+
+    @OneToMany(mappedBy="organisme")
+    @JsonIgnoreProperties("organisme")
+    private Set<Session> sessions = new HashSet<>();
 
     public Organisme() {}
 
@@ -34,6 +50,30 @@ public class Organisme {
 
     public void setLibelle(String libelle) {
         this.libelle = libelle;
+    }
+    @JsonIgnoreProperties("organisme")
+    public Set<Formateur> getFormateurs() {
+        return formateurs;
+    }
+
+    public void setFormateurs(Set<Formateur> formateurs) {
+        this.formateurs = formateurs;
+    }
+    @JsonIgnoreProperties("organisme")
+    public Set<ParticipantNational> getParticipantsNational() {
+        return participantsNational;
+    }
+
+    public void setParticipantsNational(Set<ParticipantNational> participantsNational) {
+        this.participantsNational = participantsNational;
+    }
+    @JsonIgnoreProperties("organisme")
+    public Set<Session> getSessions() {
+        return sessions;
+    }
+
+    public void setSessions(Set<Session> sessions) {
+        this.sessions = sessions;
     }
 
     @Override

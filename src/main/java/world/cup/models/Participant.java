@@ -35,13 +35,6 @@ public abstract class Participant {
     @JoinColumn(name="FK_PROFIL_ID")
     private Profile profil;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "T_PARTICIPANT_SESSION",
-            joinColumns={@JoinColumn(name="PARTICIPANT_ID")},
-            inverseJoinColumns={@JoinColumn(name ="SESSION_ID")})
-    @JsonIgnoreProperties("participants")
-    private Set<Session> sessions =  new HashSet<>();
-
     public Participant() {
     }
 
@@ -51,6 +44,7 @@ public abstract class Participant {
         this.email = email;
         this.tel = tel;
     }
+
 
     public long getId() {
         return id;
@@ -98,15 +92,6 @@ public abstract class Participant {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @JsonIgnoreProperties("participants")
-    public Set<Session> getSessions() {
-        return sessions;
-    }
-
-    public void setSessions(Set<Session> sessions) {
-        this.sessions = sessions;
     }
 
     @Override

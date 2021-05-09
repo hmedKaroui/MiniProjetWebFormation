@@ -18,11 +18,14 @@ public class AdminService {
     private final ParticipantInternationalRepository participantInternationalRepository;
     private final FormateurRepository formateurRepository;
     private final DomaineRepository domaineRepository;
+    private final FormationRepository formationRepository;
+    private final SessionRepository sessionRepository;
     @Autowired
     public AdminService(PaysRepository paysRepository,OrganismeRepository organismeRepository,
                         ParticipantNationalRepository participantNationalRepository,ProfileRepository profileRepository,
                         UserRepository userRepository,ParticipantInternationalRepository participantInternationalRepository,
-                        FormateurRepository formateurRepository ,DomaineRepository domaineRepository ) {
+                        FormateurRepository formateurRepository ,DomaineRepository domaineRepository,
+                        FormationRepository formationRepository,SessionRepository sessionRepository) {
         this.paysRepository=paysRepository;
         this.organismeRepository=organismeRepository;
         this.participantNationalRepository=participantNationalRepository;
@@ -31,6 +34,8 @@ public class AdminService {
         this.participantInternationalRepository=participantInternationalRepository;
         this.formateurRepository=formateurRepository;
         this.domaineRepository = domaineRepository;
+        this.formationRepository=formationRepository;
+        this.sessionRepository=sessionRepository;
     }
 
     //Pays Management
@@ -85,6 +90,21 @@ public class AdminService {
     public void deleteOrganisme(Long id) {
         Organisme organisme = organismeRepository.findOrganismeById(id).orElseThrow(()->
                 new ResourceNotFoundException("Organisme with id "+id+" was not found"));
+        if(organisme.getFormateurs()!=null) {
+            for (Formateur f : organisme.getFormateurs()) {
+                this.deleteFormateur(f.getId());
+            }
+        }
+        if(organisme.getSessions()!=null) {
+            for (Session s : organisme.getSessions()) {
+                this.deleteSession(s.getId());
+            }
+        }
+        if(organisme.getParticipantsNational()!=null) {
+            for (ParticipantNational p : organisme.getParticipantsNational()) {
+                this.deleteParticipantNational(p.getId());
+            }
+        }
         organismeRepository.delete(organisme);
     }
     //end of organisme management
@@ -110,6 +130,11 @@ public class AdminService {
     public void deleteDomaine(Long id) {
         Domaine domaine = domaineRepository.findDomaineById(id).orElseThrow(()->
                 new ResourceNotFoundException("Domaine with id "+id+" was not found"));
+        if(domaine.getFormations()!=null) {
+            for (Formation f : domaine.getFormations()) {
+                this.deleteFormation(f.getId());
+            }
+        }
         domaineRepository.delete(domaine);
     }
     //End of Domaine Managament
@@ -247,7 +272,79 @@ public class AdminService {
     public void deleteFormateur(Long id) {
         Formateur formateur = formateurRepository.findFormateurById(id).orElseThrow(()->
                 new ResourceNotFoundException("Formateur with id "+id+" was not found"));
+        if(formateur.getSessions()!=null) {
+            for (Session s : formateur.getSessions()) {
+                this.deleteSession(s.getId());
+            }
+        }
         formateurRepository.delete(formateur);
     }
     //End of formateur Management
+
+    //Formation managament
+    public List<Formation> findAllFormation(){
+        return formationRepository.findAll();
+    }
+    public Formation findFormationById(Long id) {
+        return formationRepository.findFormationById(id).orElseThrow(()->
+                new ResourceNotFoundException("Formation with id: "+id+" was not found"));
+    }
+
+    public Formation addFormation(Formation formation) {
+        Domaine tmp = domaineRepository.save(formation.getDomaine());
+        formation.setDomaine(tmp);
+        return formationRepository.save(formation);
+    }
+    public Formation updateFormation(Long id , Formation changes) {
+        Formation formation = formationRepository.findFormationById(id).orElseThrow(()->
+                new ResourceNotFoundException("Formation with id: "+id+" was not found"));
+        formation.setTitre(changes.getTitre());
+        formation.setTypeFormation(changes.getTypeFormation());
+        formation.setNbSession(changes.getNbSession());
+        formation.setDateDebut(changes.getDateDebut());
+        formation.setDateFin(changes.getDateFin());
+        formation.setBudget(changes.getBudget());
+        formation.setDomaine(changes.getDomaine());
+        return formationRepository.save(formation);
+    }
+    public void deleteFormation(Long id) {
+        Formation formation = formationRepository.findFormationById(id).orElseThrow(()->
+                new ResourceNotFoundException("Formation with id "+id+" was not found"));
+        formationRepository.delete(formation);
+    }
+    //end of formation management
+
+    //Session Management
+    public List<Session> findAllSession(){
+        return sessionRepository.findAll();
+    }
+    public Session findSessionById(Long id) {
+        return sessionRepository.findSessionById(id).orElseThrow(()->
+                new ResourceNotFoundException("Session with id: "+id+" was not found"));
+    }
+
+    public Session addSession(Session session) {
+        if(!organismeRepository.findOrganismeByLibelle(session.getOrganisme().getLibelle()).isPresent()) {
+            Organisme tmp = organismeRepository.save(session.getOrganisme());
+            session.setOrganisme(tmp);
+        }
+        return sessionRepository.save(session);
+    }
+    public Session updateSession(Long id , Session changes) {
+        Session session = sessionRepository.findSessionById(id).orElseThrow(()->
+                new ResourceNotFoundException("Session with id: "+id+" was not found"));
+        session.setLieu(changes.getLieu());
+        session.setDateDebut(changes.getDateDebut());
+        session.setDateFin(changes.getDateFin());
+        session.setNbParticipant(changes.getNbParticipant());
+        session.setFormateur(changes.getFormateur());
+        session.setOrganisme(changes.getOrganisme());
+        return sessionRepository.save(session);
+    }
+    public void deleteSession(Long id) {
+        Session session = sessionRepository.findSessionById(id).orElseThrow(()->
+                new ResourceNotFoundException("Session with id "+id+" was not found"));
+        sessionRepository.delete(session);
+    }
+    //end of Session Managament
 }

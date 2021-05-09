@@ -1,6 +1,7 @@
 package world.cup.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import world.cup.models_enums.FormateurType;
 
 import javax.persistence.*;
@@ -36,6 +37,7 @@ public class Formateur {
 
     @ManyToOne
     @JoinColumn(name="FK_ORGANISME_ID")
+    @JsonIgnoreProperties({"formateurs","participantsNational","sessions"})
     private Organisme organisme;
 
     @OneToMany(mappedBy="formateur")
@@ -60,10 +62,11 @@ public class Formateur {
         this.id = id;
     }
 
+    @JsonIgnoreProperties({"formateurs","participantsNational","sessions"})
     public Organisme getOrganisme() {
         return organisme;
     }
-
+    @JsonProperty
     public void setOrganisme(Organisme organisme) {
         this.organisme = organisme;
     }

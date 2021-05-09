@@ -39,15 +39,30 @@ public class Session implements Serializable {
 
     @ManyToOne
     @JoinColumn(name="FK_ORGANISME_ID")
+    @JsonIgnoreProperties({"formateurs","participantsNational","sessions"})
     private Organisme organisme;
 
-    @ManyToMany(mappedBy="sessions", cascade = CascadeType.ALL)
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "T_SESSION_FORMATIONS",
+            joinColumns={@JoinColumn(name="SESSION_ID")},
+            inverseJoinColumns={@JoinColumn(name ="FORMATION_ID")})
     @JsonIgnoreProperties("sessions")
     private Set<Formation> formations= new HashSet<>();
 
-    @ManyToMany(mappedBy="sessions", cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "T_SESSION_PARTICIPANTNATIONAL",
+            joinColumns={@JoinColumn(name="SESSION_ID")},
+            inverseJoinColumns={@JoinColumn(name ="PARTICIPANT_ID")})
     @JsonIgnoreProperties("sessions")
-    private Set<Participant> participants = new HashSet<>();
+    private Set<ParticipantNational> participantsN = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "T_SESSION_PARTICIPANTINTERNATIONAL",
+            joinColumns={@JoinColumn(name="SESSION_ID")},
+            inverseJoinColumns={@JoinColumn(name ="PARTICIPANT_ID")})
+    @JsonIgnoreProperties("sessions")
+    private Set<ParticipantInternational> participantsI = new HashSet<>();
 
     public Session() {}
 
@@ -107,10 +122,11 @@ public class Session implements Serializable {
         this.formateur = formateur;
     }
 
+    @JsonIgnoreProperties({"formateurs","participantsNational","sessions"})
     public Organisme getOrganisme() {
         return organisme;
     }
-
+    @JsonProperty
     public void setOrganisme(Organisme organisme) {
         this.organisme = organisme;
     }
@@ -123,13 +139,22 @@ public class Session implements Serializable {
     public void setFormations(Set<Formation> formations) {
         this.formations = formations;
     }
+
     @JsonIgnoreProperties("sessions")
-    public Set<Participant> getParticipants() {
-        return participants;
+    public Set<ParticipantNational> getParticipantsN() {
+        return participantsN;
     }
 
-    public void setParticipants(Set<Participant> participants) {
-        this.participants = participants;
+    public void setParticipantsN(Set<ParticipantNational> participantsN) {
+        this.participantsN = participantsN;
+    }
+    @JsonIgnoreProperties("sessions")
+    public Set<ParticipantInternational> getParticipantsI() {
+        return participantsI;
+    }
+
+    public void setParticipantsI(Set<ParticipantInternational> participantsI) {
+        this.participantsI = participantsI;
     }
 
     @Override

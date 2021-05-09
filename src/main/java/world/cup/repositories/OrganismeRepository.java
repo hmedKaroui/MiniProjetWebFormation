@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface OrganismeRepository extends JpaRepository<Organisme,Long> {
     public Optional<Organisme> findOrganismeById(Long id);
+    public Optional<Organisme> findOrganismeByLibelle(String libelle);
+
 }

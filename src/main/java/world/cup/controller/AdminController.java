@@ -275,4 +275,70 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     //End of Formateur endpoints
+
+    //Formation endpoints
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/formations")
+    public ResponseEntity<List<Formation>> getAllFormation() {
+        List<Formation> formations = adminService.findAllFormation();
+        return new ResponseEntity<>(formations, HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/formations/{id}")
+    public ResponseEntity<Formation> getFormationById(@PathVariable Long id) {
+        Formation formation = adminService.findFormationById(id);
+        return new ResponseEntity<>(formation,HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/formations/add")
+    public ResponseEntity<Formation> addFormation(@RequestBody Formation formation) {
+        Formation f = adminService.addFormation(formation);
+        return new ResponseEntity<>(f,HttpStatus.CREATED);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/formations/update/{id}")
+    public ResponseEntity<Formation> updateFormation(@PathVariable Long id ,@RequestBody Formation changes) {
+        Formation formation = adminService.updateFormation(id,changes);
+        return new ResponseEntity<>(formation,HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/formations/delete/{id}")
+    public ResponseEntity<?> deleteFormation(@PathVariable Long id) {
+        adminService.deleteFormation(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    //end of Formation endpoints
+
+    //Session endpoints
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/sessions")
+    public ResponseEntity<List<Session>> getAllSession() {
+        List<Session> sessions = adminService.findAllSession();
+        return new ResponseEntity<>(sessions, HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/sessions/{id}")
+    public ResponseEntity<Session> getSessionById(@PathVariable Long id) {
+        Session session = adminService.findSessionById(id);
+        return new ResponseEntity<>(session,HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/sessions/add")
+    public ResponseEntity<Session> addSession(@RequestBody Session session) {
+        Session s = adminService.addSession(session);
+        return new ResponseEntity<>(s,HttpStatus.CREATED);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/sessions/update/{id}")
+    public ResponseEntity<Session> updateSession(@PathVariable Long id ,@RequestBody Session changes) {
+        Session session = adminService.updateSession(id,changes);
+        return new ResponseEntity<>(session,HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/sessions/delete/{id}")
+    public ResponseEntity<?> deleteSession(@PathVariable Long id) {
+        adminService.deleteSession(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    //end of Session end points
 }
