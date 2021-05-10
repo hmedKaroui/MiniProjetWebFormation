@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import world.cup.models_enums.FormateurType;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,7 +13,7 @@ import java.util.Set;
 @SuppressWarnings("SpellCheckingInspection")
 @Entity
 @Table(name= "formateurs")
-public class Formateur {
+public class Formateur  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

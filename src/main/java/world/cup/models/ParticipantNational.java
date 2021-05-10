@@ -11,9 +11,7 @@ import java.util.Set;
 @SuppressWarnings("SpellCheckingInspection")
 @Entity
 @DiscriminatorValue("national")
-public class ParticipantNational extends Participant implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class ParticipantNational extends Participant {
 
     @ManyToOne
     @JoinColumn

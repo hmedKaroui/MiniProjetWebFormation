@@ -11,9 +11,7 @@ import java.util.Set;
 
 @Entity
 @DiscriminatorValue("international")
-public class ParticipantInternational extends Participant implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class ParticipantInternational extends Participant {
 
     @ManyToOne
     @JoinColumn

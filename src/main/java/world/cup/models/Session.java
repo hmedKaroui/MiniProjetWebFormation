@@ -12,8 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(name= "sessions")
-public class Session implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Session {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
