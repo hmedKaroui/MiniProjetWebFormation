@@ -43,7 +43,7 @@ public class Formation {
         private Domaine domaine;
 
         @ManyToMany(fetch = FetchType.LAZY, mappedBy="formations")
-        @JsonIgnoreProperties("formations")
+        @JsonIgnoreProperties(value="formations" , allowSetters = true)
         private Set<Session> sessions =  new HashSet<>();
 
     public Formation() {}
@@ -123,7 +123,7 @@ public class Formation {
     }
 
 
-    @JsonIgnoreProperties("formations")
+    @JsonIgnoreProperties(value="formations" ,allowSetters = true)
     public Set<Session> getSessions() {
         return sessions;
     }

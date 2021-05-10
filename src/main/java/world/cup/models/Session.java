@@ -46,21 +46,21 @@ public class Session {
     @JoinTable(name = "T_SESSION_FORMATIONS",
             joinColumns={@JoinColumn(name="SESSION_ID")},
             inverseJoinColumns={@JoinColumn(name ="FORMATION_ID")})
-    @JsonIgnoreProperties("sessions")
+    @JsonIgnoreProperties(value="sessions" ,allowSetters = true)
     private Set<Formation> formations= new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "T_SESSION_PARTICIPANTNATIONAL",
             joinColumns={@JoinColumn(name="SESSION_ID")},
             inverseJoinColumns={@JoinColumn(name ="PARTICIPANT_ID")})
-    @JsonIgnoreProperties("sessions")
+    @JsonIgnoreProperties(value="sessions" ,allowSetters = true)
     private Set<ParticipantNational> participantsN = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "T_SESSION_PARTICIPANTINTERNATIONAL",
             joinColumns={@JoinColumn(name="SESSION_ID")},
             inverseJoinColumns={@JoinColumn(name ="PARTICIPANT_ID")})
-    @JsonIgnoreProperties("sessions")
+    @JsonIgnoreProperties(value="sessions" ,allowSetters = true)
     private Set<ParticipantInternational> participantsI = new HashSet<>();
 
     public Session() {}
@@ -130,7 +130,7 @@ public class Session {
         this.organisme = organisme;
     }
 
-    @JsonIgnoreProperties("sessions")
+    @JsonIgnoreProperties(value="sessions" ,allowSetters = true)
     public Set<Formation> getFormations() {
         return formations;
     }
@@ -139,7 +139,7 @@ public class Session {
         this.formations = formations;
     }
 
-    @JsonIgnoreProperties("sessions")
+    @JsonIgnoreProperties(value="sessions" ,allowSetters = true)
     public Set<ParticipantNational> getParticipantsN() {
         return participantsN;
     }
@@ -147,7 +147,7 @@ public class Session {
     public void setParticipantsN(Set<ParticipantNational> participantsN) {
         this.participantsN = participantsN;
     }
-    @JsonIgnoreProperties("sessions")
+    @JsonIgnoreProperties(value="sessions" ,allowSetters = true)
     public Set<ParticipantInternational> getParticipantsI() {
         return participantsI;
     }

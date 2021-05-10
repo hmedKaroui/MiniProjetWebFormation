@@ -19,7 +19,7 @@ public class ParticipantNational extends Participant {
     private Organisme organisme;
 
     @ManyToMany(fetch = FetchType.LAZY ,mappedBy="participantsN")
-    @JsonIgnoreProperties("participantsN")
+    @JsonIgnoreProperties(value="participantsN",allowSetters = true)
     private Set<Session> sessions =  new HashSet<>();
 
     public ParticipantNational() { super(); }
@@ -34,7 +34,7 @@ public class ParticipantNational extends Participant {
         this.organisme = organisme;
     }
 
-    @JsonIgnoreProperties("participantsN")
+    @JsonIgnoreProperties(value="participantsN" ,allowSetters = true)
     public Set<Session> getSessions() {
         return sessions;
     }

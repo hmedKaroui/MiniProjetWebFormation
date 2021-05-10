@@ -340,5 +340,43 @@ public class AdminController {
         adminService.deleteSession(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/sessions/updateFormations/{id}")
+    public ResponseEntity<Session> updateSessionFormations(@PathVariable Long id ,@RequestBody Formation changes) {
+        Session session = adminService.updateSessionFormations(id,changes);
+        return new ResponseEntity<>(session,HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/sessions/{idSesssion}/deleteFormations/{idFormation}")
+    public ResponseEntity<Session> deleteSessionFormations(@PathVariable("idSesssion") Long idS ,@PathVariable("idFormation") Long idF) {
+        Session session = adminService.deleteSessionFormations(idS,idF);
+        return new ResponseEntity<>(session,HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/sessions/updatePN/{id}")
+    public ResponseEntity<Session> updateSessionPN(@PathVariable Long id ,@RequestBody ParticipantNational changes) {
+        Session session = adminService.updateSessionPN(id,changes);
+        return new ResponseEntity<>(session,HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/sessions/{idSesssion}/deletePN/{idPN}")
+    public ResponseEntity<Session> deleteSessionPN(@PathVariable("idSesssion") Long idS ,@PathVariable("idPN") Long idPN) {
+        Session session = adminService.deleteSessionPN(idS,idPN);
+        return new ResponseEntity<>(session,HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/sessions/updatePI/{id}")
+    public ResponseEntity<Session> updateSessionPI(@PathVariable Long id ,@RequestBody ParticipantInternational changes) {
+        Session session = adminService.updateSessionPI(id,changes);
+        return new ResponseEntity<>(session,HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/sessions/{idSesssion}/deletePI/{idPI}")
+    public ResponseEntity<Session> deleteSessionPI(@PathVariable("idSesssion") Long idS ,@PathVariable("idPI") Long idPI) {
+        Session session = adminService.deleteSessionPI(idS,idPI);
+        return new ResponseEntity<>(session,HttpStatus.OK);
+    }
     //end of Session end points
 }

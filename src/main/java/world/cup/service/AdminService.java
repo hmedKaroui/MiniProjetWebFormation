@@ -341,6 +341,62 @@ public class AdminService {
         session.setOrganisme(changes.getOrganisme());
         return sessionRepository.save(session);
     }
+
+    public Session updateSessionFormations(Long id , Formation newAdded) {
+        Session session = sessionRepository.findSessionById(id).orElseThrow(()->
+                new ResourceNotFoundException("Session with id: "+id+" was not found"));
+        session.getFormations().add(newAdded);
+        return sessionRepository.save(session);
+    }
+
+    public Session deleteSessionFormations(Long idS , Long idF) {
+        Session session = sessionRepository.findSessionById(idS).orElseThrow(()->
+                new ResourceNotFoundException("Session with id: "+idS+" was not found"));
+
+        Formation deleatedFormation = formationRepository.findFormationById(idF).orElseThrow(()->
+                new ResourceNotFoundException("Formation with id: "+idF+" was not found"));
+
+        session.getFormations().remove(deleatedFormation);
+        return sessionRepository.save(session);
+    }
+    public Session updateSessionPN(Long id , ParticipantNational newAdded) {
+        Session session = sessionRepository.findSessionById(id).orElseThrow(()->
+                new ResourceNotFoundException("Session with id: "+id+" was not found"));
+        if(session.getParticipantsN().size() + session.getParticipantsI().size() < session.getNbParticipant())
+                {session.getParticipantsN().add(newAdded);}
+        return sessionRepository.save(session);
+    }
+
+    public Session deleteSessionPN(Long idS , Long idPN) {
+        Session session = sessionRepository.findSessionById(idS).orElseThrow(()->
+                new ResourceNotFoundException("Session with id: "+idS+" was not found"));
+
+        ParticipantNational deleatedPN = participantNationalRepository.findParticipantNationalById(idPN).orElseThrow(()->
+                new ResourceNotFoundException("Participant National with id: "+idPN+" was not found"));
+
+        session.getParticipantsN().remove(deleatedPN);
+        return sessionRepository.save(session);
+    }
+
+    public Session updateSessionPI(Long id , ParticipantInternational newAdded) {
+        Session session = sessionRepository.findSessionById(id).orElseThrow(()->
+                new ResourceNotFoundException("Session with id: "+id+" was not found"));
+        if(session.getParticipantsN().size() + session.getParticipantsI().size() < session.getNbParticipant())
+        {session.getParticipantsI().add(newAdded);}
+        return sessionRepository.save(session);
+    }
+
+    public Session deleteSessionPI(Long idS , Long idPI) {
+        Session session = sessionRepository.findSessionById(idS).orElseThrow(()->
+                new ResourceNotFoundException("Session with id: "+idS+" was not found"));
+
+        ParticipantInternational deleatedPI = participantInternationalRepository.findParticipantInternationalById(idPI).orElseThrow(()->
+                new ResourceNotFoundException("Participant National with id: "+idPI+" was not found"));
+
+        session.getParticipantsI().remove(deleatedPI);
+        return sessionRepository.save(session);
+    }
+
     public void deleteSession(Long id) {
         Session session = sessionRepository.findSessionById(id).orElseThrow(()->
                 new ResourceNotFoundException("Session with id "+id+" was not found"));
