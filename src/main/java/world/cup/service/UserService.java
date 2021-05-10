@@ -58,19 +58,21 @@ public class UserService {
     public Participant updateParticipantSessions(Long id , Session newAdded) {
         Participant p = participantRepository.findParticipantById(id).orElseThrow(()->
                 new ResourceNotFoundException("Participant with id: "+id+" was not found"));
+        Session s = sessionRepository.findSessionById(newAdded.getId()).orElseThrow(()->
+                new ResourceNotFoundException("Session with id: "+newAdded.getId()+" was not found"));
         if (p instanceof ParticipantNational) {
             ParticipantNational pN = (ParticipantNational)p;
-            if(newAdded.getParticipantsN().size() + newAdded.getParticipantsI().size() < newAdded.getNbParticipant()) {
-                newAdded.getParticipantsN().add(pN);
-                sessionRepository.save(newAdded);
+            if(s.getParticipantsN().size() + s.getParticipantsI().size() < s.getNbParticipant()) {
+                s.getParticipantsN().add(pN);
+                sessionRepository.save(s);
             }
             return pN;
         }
         else if ( p instanceof ParticipantInternational) {
             ParticipantInternational pI = (ParticipantInternational) p;
-            if (newAdded.getParticipantsN().size() + newAdded.getParticipantsI().size() < newAdded.getNbParticipant()) {
-                newAdded.getParticipantsI().add(pI);
-                sessionRepository.save(newAdded);
+            if (s.getParticipantsN().size() + s.getParticipantsI().size() < s.getNbParticipant()) {
+                s.getParticipantsI().add(pI);
+                sessionRepository.save(s);
 
             }
             return pI;
