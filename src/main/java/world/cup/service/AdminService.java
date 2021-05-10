@@ -345,7 +345,8 @@ public class AdminService {
     public Session updateSessionFormations(Long id , Formation newAdded) {
         Session session = sessionRepository.findSessionById(id).orElseThrow(()->
                 new ResourceNotFoundException("Session with id: "+id+" was not found"));
-        session.getFormations().add(newAdded);
+        if(newAdded.getSessions().size()<newAdded.getNbSession())
+            {session.getFormations().add(newAdded);}
         return sessionRepository.save(session);
     }
 
