@@ -93,6 +93,7 @@ public class AdminService {
         if(organisme.getFormateurs()!=null) {
             for (Formateur f : organisme.getFormateurs()) {
                 this.deleteFormateur(f.getId());
+
             }
         }
         if(organisme.getSessions()!=null) {
@@ -185,6 +186,11 @@ public class AdminService {
     public void deleteParticipantNational(Long id) {
         ParticipantNational participantNational = participantNationalRepository.findParticipantNationalById(id).orElseThrow(()->
                 new ResourceNotFoundException("Participant National with id "+id+" was not found"));
+        if(participantNational.getSessions()!=null) {
+            for (Session s : participantNational.getSessions()) {
+                deleteSessionPN(s.getId(), participantNational.getId());
+            }
+        }
         participantNationalRepository.delete(participantNational);
 
         User user = userRepository.findUserById(id).orElseThrow(()->
@@ -233,6 +239,11 @@ public class AdminService {
     public void deleteParticipantInternational(Long id) {
         ParticipantInternational participantInternational = participantInternationalRepository.findParticipantInternationalById(id).orElseThrow(()->
                 new ResourceNotFoundException("Participant International with id "+id+" was not found"));
+        if(participantInternational.getSessions()!=null) {
+            for (Session s : participantInternational.getSessions()) {
+                deleteSessionPI(s.getId(), participantInternational.getId());
+            }
+        }
         participantInternationalRepository.delete(participantInternational);
 
         User user = userRepository.findUserById(id).orElseThrow(()->
@@ -310,6 +321,11 @@ public class AdminService {
     public void deleteFormation(Long id) {
         Formation formation = formationRepository.findFormationById(id).orElseThrow(()->
                 new ResourceNotFoundException("Formation with id "+id+" was not found"));
+        if(formation.getSessions()!=null) {
+            for (Session s : formation.getSessions()) {
+                deleteSessionFormations(s.getId(), formation.getId());
+            }
+        }
         formationRepository.delete(formation);
     }
     //end of formation management
